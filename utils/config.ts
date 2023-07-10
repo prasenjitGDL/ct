@@ -10,9 +10,7 @@ export const enum Prefix {
   AWS = "AWS",
 }
 
-const SERVER_MODE = process.env.SERVER || "";
-
-export const readConfig = (prefix: string = SERVER_MODE) => {
+export const readConfig = (prefix: string) => {
   return {
     clientId: process.env[prefix + "_CLIENT_ID"] || "",
     clientSecret: process.env[prefix + "_CLIENT_SECRET"] || "",
