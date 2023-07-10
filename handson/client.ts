@@ -13,36 +13,72 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: `https://auth.${readConfig().region}.commercetools.com`,
-  projectKey: readConfig().projectKey,
-  credentials: {
-    clientId: readConfig().clientId,
-    clientSecret: readConfig().clientSecret,
-  },
-  scopes: [readConfig().scope],
-  fetch,
-};
+// const authMiddlewareOptions: AuthMiddlewareOptions = {
+//   host: `https://auth.${readConfig().region}.commercetools.com`,
+//   projectKey: readConfig().projectKey,
+//   credentials: {
+//     clientId: readConfig().clientId,
+//     clientSecret: readConfig().clientSecret,
+//   },
+//   scopes: [readConfig().scope],
+//   fetch,
+// };
 
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: `https://api.${readConfig().region}.commercetools.com`,
-  includeOriginalRequest: true,
-  ...fetch,
-};
+// const httpMiddlewareOptions: HttpMiddlewareOptions = {
+//   host: `https://api.${readConfig().region}.commercetools.com`,
+//   includeOriginalRequest: true,
+//   ...fetch,
+// };
 
-const client = new ClientBuilder()
-  .withHttpMiddleware(httpMiddlewareOptions)
-  .withProjectKey(readConfig().projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
-  .withLoggerMiddleware()
-  .build();
+// const client = new ClientBuilder()
+//   .withHttpMiddleware(httpMiddlewareOptions)
+//   .withProjectKey(readConfig().projectKey)
+//   .withClientCredentialsFlow(authMiddlewareOptions)
+//   .withLoggerMiddleware()
+//   .build();
+
+// const createApiClient = () => {
+//   const apiClient = createApiBuilderFromCtpClient(client).withProjectKey({
+//     projectKey: readConfig().projectKey,
+//   });
+//   return apiClient;
+// };
 
 const createApiClient = () => {
-  const apiClient = createApiBuilderFromCtpClient(client).withProjectKey({
-    projectKey: readConfig().projectKey,
-  });
-  return apiClient;
-};
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+  } = readConfig(Prefix.DEV);
+
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const apiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return apiRoot;
+
+}
 
 // const createImportApiClient = () => {
 //     const importApiClient = createImportApiBuilderFromCtpClient(client);
@@ -59,7 +95,7 @@ const createApiClient = () => {
 //     return myApiClient;
 // }
 
-export const apiRoot = createApiClient();
+export const apiRoot: ApiRoot = createApiClient();
 // export const importApiRoot = createImportApiClient();
 // export const storeApiRoot = createStoreApiClient();
 // export const myApiRoot = createMyApiClient();
