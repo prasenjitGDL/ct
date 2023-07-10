@@ -46,7 +46,7 @@ export const confirmCustomerEmail = (
     .execute();
 };
 
-export const assignCustomerToCustomerGroup = (
+export const assignCustomerToCustomerGroup = async (
     customerKey: string,
     customerGroupKey: string
   ) => {
