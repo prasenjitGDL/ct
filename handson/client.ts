@@ -13,37 +13,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// const authMiddlewareOptions: AuthMiddlewareOptions = {
-//   host: `https://auth.${readConfig().region}.commercetools.com`,
-//   projectKey: readConfig().projectKey,
-//   credentials: {
-//     clientId: readConfig().clientId,
-//     clientSecret: readConfig().clientSecret,
-//   },
-//   scopes: [readConfig().scope],
-//   fetch,
-// };
-
-// const httpMiddlewareOptions: HttpMiddlewareOptions = {
-//   host: `https://api.${readConfig().region}.commercetools.com`,
-//   includeOriginalRequest: true,
-//   ...fetch,
-// };
-
-// const client = new ClientBuilder()
-//   .withHttpMiddleware(httpMiddlewareOptions)
-//   .withProjectKey(readConfig().projectKey)
-//   .withClientCredentialsFlow(authMiddlewareOptions)
-//   .withLoggerMiddleware()
-//   .build();
-
-// const createApiClient = () => {
-//   const apiClient = createApiBuilderFromCtpClient(client).withProjectKey({
-//     projectKey: readConfig().projectKey,
-//   });
-//   return apiClient;
-// };
-
 const createApiClient = () => {
   const {
     clientId,
