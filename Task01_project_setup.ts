@@ -13,24 +13,24 @@ const getProject = () => {
 };
 
 getProject()
-  .then((res) => log(res))
-  .catch((error) => log(error));
+  .then(log)
+  .catch(log);
 
 // TODO: Get shipping method by id
-// const getShippingMethod = (id: string) => {
-//   return apiRoot.shippingMethods().withId({ ID: id }).get().execute();
-// };
+const getShippingMethod = (id: string) => {
+  return apiRoot.shippingMethods().withId({ ID: id }).get().execute();
+};
 
-// getShippingMethod("shipping_id")
-//   .then((res) => log(res))
-//   .catch((error) => log(error));
+getShippingMethod("shipping_id")
+  .then(log)
+  .catch(log);
 
 
 // TODO: Get standard tax category by key
-// const getTaxCategory = (key: string) => {
-//     return apiRoot.taxCategories().withKey({key}).get().execute()
-// }
+const getTaxCategory = (key: string) => {
+    return apiRoot.taxCategories().withKey({key}).get().execute()
+}
 
-// getTaxCategory("tax_key")
-//   .then((res) => log(res))
-//   .catch((error) => log(error));
+getTaxCategory("tax_key")
+  .then(log)
+  .catch(log);
