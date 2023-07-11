@@ -8,16 +8,16 @@ import {
 
 import { log } from "./utils/logger";
 
-const productSelectionKey = "tt-berlin-store-selection";
+const productSelectionKey = "finest-selection-1";
 
-createProductSelection(productSelectionKey, "Berlin Store Selection").then(log).catch(log);
+createProductSelection(productSelectionKey, "main store").then(log).catch(log);
 
-// getProductSelectionByKey(productSelectionKey).then(log).catch(log);
+getProductSelectionByKey(productSelectionKey).then(log).catch(log);
 
-// addProductsToProductSelection(productSelectionKey, ['tulip-seed-product']).then(log).catch(log);
+addProductsToProductSelection(productSelectionKey, ['maternity_top']).then(log).catch(log);
 
-// getProductsInProductSelection(productSelectionKey).then(log).catch(log);
+getProductsInProductSelection(productSelectionKey).then(log).catch(log);
 
-// addProductSelectionToStore("berlin-store", productSelectionKey).then(log).catch(log);
+addProductSelectionToStore("random-key-123", productSelectionKey).then(log).catch(log);
 
-// getProductsInStore("berlin-store").then(log).catch(log);
+getProductsInStore("random-key-123").then(log).catch(log);

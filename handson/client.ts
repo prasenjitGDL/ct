@@ -84,17 +84,86 @@ const createImportApiClient = () => {
   return importApiRoot;
 }
 
-// const createStoreApiClient = () => {
-//     const storeApiClient = createApiBuilderFromCtpClient(client);
-//     return storeApiClient;
-// }
+const createStoreApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+    storeKey
+  } = readConfig(Prefix.STORE);
 
-// const createMyApiClient = () => {
-//     const myApiClient = createApiBuilderFromCtpClient(client);
-//     return myApiClient;
-// }
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const storeApiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return storeApiRoot;
+
+}
+
+const createMyApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+    username,
+    password
+  } = readConfig(Prefix.ME);
+
+  const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+      user: {
+        username,
+        password
+      }
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withPasswordFlow(passwordAuthMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const myApiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return myApiRoot;
+
+}
 
 export const apiRoot: ApiRoot = createApiClient();
 export const importApiRoot: ImportApiRoot = createImportApiClient();
-// export const storeApiRoot = createStoreApiClient();
-// export const myApiRoot = createMyApiClient();
+export const storeApiRoot: ApiRoot = createStoreApiClient();
+export const myApiRoot: ApiRoot = createMyApiClient();
