@@ -13,53 +13,157 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: `https://auth.${readConfig().region}.commercetools.com`,
-  projectKey: readConfig().projectKey,
-  credentials: {
-    clientId: readConfig().clientId,
-    clientSecret: readConfig().clientSecret,
-  },
-  scopes: [readConfig().scope],
-  fetch,
-};
-
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: `https://api.${readConfig().region}.commercetools.com`,
-  includeOriginalRequest: true,
-  ...fetch,
-};
-
-const client = new ClientBuilder()
-  .withHttpMiddleware(httpMiddlewareOptions)
-  .withProjectKey(readConfig().projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
-  .withLoggerMiddleware()
-  .build();
-
 const createApiClient = () => {
-  const apiClient = createApiBuilderFromCtpClient(client).withProjectKey({
-    projectKey: readConfig().projectKey,
-  });
-  return apiClient;
-};
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+  } = readConfig(Prefix.DEV);
 
-// const createImportApiClient = () => {
-//     const importApiClient = createImportApiBuilderFromCtpClient(client);
-//     return importApiClient;
-// }
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
 
-// const createStoreApiClient = () => {
-//     const storeApiClient = createApiBuilderFromCtpClient(client);
-//     return storeApiClient;
-// }
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
 
-// const createMyApiClient = () => {
-//     const myApiClient = createApiBuilderFromCtpClient(client);
-//     return myApiClient;
-// }
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
 
-export const apiRoot = createApiClient();
-// export const importApiRoot = createImportApiClient();
-// export const storeApiRoot = createStoreApiClient();
-// export const myApiRoot = createMyApiClient();
+  const apiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return apiRoot;
+
+}
+
+const createImportApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+  } = readConfig(Prefix.IMPORT);
+
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const importApiRoot = createImportApiBuilderFromCtpClient(client)
+    .withProjectKeyValue({ projectKey });
+
+  return importApiRoot;
+}
+
+const createStoreApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+    storeKey
+  } = readConfig(Prefix.STORE);
+
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const storeApiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return storeApiRoot;
+
+}
+
+const createMyApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+    username,
+    password
+  } = readConfig(Prefix.ME);
+
+  const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+      user: {
+        username,
+        password
+      }
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withPasswordFlow(passwordAuthMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const myApiRoot = createApiBuilderFromCtpClient(client)
+    .withProjectKey({ projectKey });
+
+  return myApiRoot;
+
+}
+
+export const apiRoot: ApiRoot = createApiClient();
+export const importApiRoot: ImportApiRoot = createImportApiClient();
+export const storeApiRoot: ApiRoot = createStoreApiClient();
+export const myApiRoot: ApiRoot = createMyApiClient();

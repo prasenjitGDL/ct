@@ -10,11 +10,11 @@ import {
 import { log } from "./utils/logger";
 
 const customerDraft: CustomerDraft = {
-    firstName: "Test",
-    lastName: "Tester",
-    email: "test@test.com",
-    password: "password",
-    key: "tt-customer",
+    firstName: "Test4",
+    lastName: "Tester4",
+    email: "test4@test.com",
+    password: "password4",
+    key: "keyForCustomer4",
     addresses: [
         {
             country: "DE",
@@ -27,14 +27,14 @@ const customerDraft: CustomerDraft = {
 
 createCustomer(customerDraft).then(log).catch(log);
 
-// getCustomerByKey(customerDraft.key!).then(log).catch(log);
+getCustomerByKey(customerDraft.key!).then(log).catch(log);
 
-// getCustomerByKey(customerDraft.key!)
-//     .then(createCustomerToken)
-//     .then(confirmCustomerEmail)
-//     .then(log)
-//     .catch(log);
+getCustomerByKey(customerDraft.key!)
+    .then(createCustomerToken)
+    .then(confirmCustomerEmail)
+    .then(log)
+    .catch(log);
 
-// assignCustomerToCustomerGroup(customerDraft.key!, "indoor-customers")
-//     .then(log)
-//     .catch(log);
+assignCustomerToCustomerGroup(customerDraft.key!, "indoor-customers")
+    .then(log)
+    .catch(log);

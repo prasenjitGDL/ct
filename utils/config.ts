@@ -5,14 +5,12 @@ config();
 export const enum Prefix {
   DEV = "DEV",
   IMPORT = "IMPORT",
-  STORE = "BERLIN",
-  ME = "ME",
+  STORE = "DEV",
+  ME = "DEV",
   AWS = "AWS",
 }
 
-const SERVER_MODE = process.env.SERVER || "";
-
-export const readConfig = (prefix: string = SERVER_MODE) => {
+export const readConfig = (prefix: string) => {
   return {
     clientId: process.env[prefix + "_CLIENT_ID"] || "",
     clientSecret: process.env[prefix + "_CLIENT_SECRET"] || "",
@@ -23,6 +21,7 @@ export const readConfig = (prefix: string = SERVER_MODE) => {
     host: process.env[prefix + "_API_URL"] || "",
     username: process.env[prefix + "_CUSTOMER_EMAIL"] || "",
     password: process.env[prefix + "_CUSTOMER_PASSWORD"] || "",
+    storeKey: process.env[prefix + "_STORE_KEY"] || ""
   };
 };
 
