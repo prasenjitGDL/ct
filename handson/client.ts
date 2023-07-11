@@ -49,10 +49,40 @@ const createApiClient = () => {
 
 }
 
-// const createImportApiClient = () => {
-//     const importApiClient = createImportApiBuilderFromCtpClient(client);
-//     return importApiClient;
-// }
+const createImportApiClient = () => {
+  const {
+    clientId,
+    clientSecret,
+    projectKey,
+    oauthHost,
+    host,
+  } = readConfig(Prefix.IMPORT);
+
+  const authMiddlewareOptions: AuthMiddlewareOptions = {
+    host: oauthHost,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret
+    },
+    fetch
+  };
+
+  const httpMiddlewareOptions: HttpMiddlewareOptions = {
+    host: host,
+    fetch
+  };
+
+  const client = new ClientBuilder()
+    .withClientCredentialsFlow(authMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .build();
+
+  const importApiRoot = createImportApiBuilderFromCtpClient(client)
+    .withProjectKeyValue({ projectKey });
+
+  return importApiRoot;
+}
 
 // const createStoreApiClient = () => {
 //     const storeApiClient = createApiBuilderFromCtpClient(client);
@@ -65,6 +95,6 @@ const createApiClient = () => {
 // }
 
 export const apiRoot: ApiRoot = createApiClient();
-// export const importApiRoot = createImportApiClient();
+export const importApiRoot: ImportApiRoot = createImportApiClient();
 // export const storeApiRoot = createStoreApiClient();
 // export const myApiRoot = createMyApiClient();
